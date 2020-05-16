@@ -7,6 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
 from torchvision.datasets.folder import default_loader
 import random
+
 class DiFDataset(Dataset):
     """Face Landmarks dataset."""
 

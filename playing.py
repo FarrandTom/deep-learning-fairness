@@ -34,6 +34,10 @@ from models.resnet import Res, PretrainedRes
 from utils.utils import dict_html, create_table, plot_confusion_matrix
 from inception import *
 
+# Add wandb logging which is synced with the Tensorboard
+import wandb 
+wandb.init(sync_tensorboard=True)
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 layout = {'cosine': {
@@ -216,8 +220,8 @@ def train(trainloader, model, optimizer, epoch):
         keys_input = labels == helper.params['key_to_drop']
         inputs_keys = inputs[keys_input]
 
-        inputs[keys_input] = torch.tensor(ndimage.filters.gaussian_filter(inputs[keys_input].numpy(),
-                                                                          sigma=helper.params['csigma']))
+        # inputs[keys_input] = torch.tensor(ndimage.filters.gaussian_filter(inputs[keys_input].numpy(),
+        #                                                                   sigma=helper.params['csigma']))
         inputs = inputs.to(device)
         labels = labels.to(device)
         # zero the parameter gradients
@@ -269,7 +273,6 @@ if __name__ == '__main__':
     epochs = int(helper.params['epochs'])
     S = float(helper.params['S'])
     z = float(helper.params['z'])
-    sigma = z * S
     dp = helper.params['dp']
     mu = helper.params['mu']
     logger.info(f'DP: {dp}')
@@ -286,6 +289,8 @@ if __name__ == '__main__':
     elif helper.params['dataset'] == 'dif':
         helper.load_dif_data()
         helper.get_unbalanced_faces()
+    elif helper.params['dataset'] == 'celeba':
+        helper.load_celeba_data()
     else:
         helper.load_cifar_data(dataset=params['dataset'])
         logger.info('before loader')
@@ -310,6 +315,8 @@ if __name__ == '__main__':
         logger.info('num class: ', num_classes)  
     elif helper.params['dataset'] == 'dif':
         num_classes = len(helper.labels)
+    elif helper.params['dataset'] == 'celeba':
+        num_classes = 2
     else:
         num_classes = 10
 

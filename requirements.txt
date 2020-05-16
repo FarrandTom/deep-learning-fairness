@@ -1,7 +1,7 @@
 tqdm
-torch
+pytorch
 torchvision
 pyyaml
 tensorboardX
-sklearn
+scikit-learn
 matplotlib

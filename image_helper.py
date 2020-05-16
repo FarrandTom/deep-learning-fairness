@@ -14,7 +14,10 @@ import random
 
 from torchvision import datasets, transforms
 import numpy as np
+
 from utils.dif_dataset import DiFDataset
+from utils.celeba_dataset import CelebADataset
+
 from models.simple import SimpleNet
 from collections import OrderedDict
 
@@ -197,7 +200,7 @@ class ImageHelper(Helper):
         self.dataset_size = len(self.train_dataset)
         logger.info(self.dataset_size)
         return True
-
+    
     def load_inat_data(self):
         self.mu_data = [0.485, 0.456, 0.406]
         self.std_data = [0.229, 0.224, 0.225]
@@ -351,7 +354,52 @@ class ImageHelper(Helper):
 
         return True
 
+    
+    def load_celeba_data(self):
+        """Build and return a data loader."""
+        image_dir = ''
+        attr_path = ''
+        selected_attrs = ''
+        
+        crop_size = 178
+        image_size = 128
+        
+        flip = transforms.RandomHorizontalFlip()
+        crop = transforms.CenterCrop(crop_size)
+        resize = transforms.Resize(image_size)
+        normalize = transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
+        
+        transform_train = transforms.Compose([flip, crop, resize, transforms.ToTensor(), normalize])
+        transform_test = transforms.Compose([crop, resize, transforms.ToTensor(), normalize])
 
+        self.train_dataset = CelebADataset(image_dir=self.params['image_dir'],
+                                           attr_path=self.params['attr_path'],
+                                           selected_attr=self.params['selected_attr'],
+                                           mode='train',
+                                           transform=transform_train)
+
+        self.test_dataset = CelebADataset(image_dir=self.params['image_dir'],
+                                          attr_path=self.params['attr_path'],
+                                          selected_attr=self.params['selected_attr'],
+                                          mode='test',
+                                          transform=transform_test)
+        self.dataset_size = len(self.train_dataset) + len(self.test_dataset)
+        logger.info(f"Length of CelebA dataset: {self.dataset_size}")
+        
+        self.train_loader = torch.utils.data.DataLoader(self.train_dataset,
+                                                        batch_size=self.params['batch_size'],
+                                                        shuffle=True,
+                                                        num_workers=2)
+
+        self.test_loader = torch.utils.data.DataLoader(self.test_dataset,
+                                                       batch_size=self.params['test_batch_size'],
+                                                       shuffle=False,
+                                                       num_workers=2)
+        
+        self.labels = [0, 1]
+        return True
+    
+    
     def load_jigsaw(self):
         import pickle
         import pandas as pd

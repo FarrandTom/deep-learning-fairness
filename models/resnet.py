@@ -10,7 +10,7 @@ class Res(SimpleNet):
         if cifar10:
             self.res = models.resnet18(num_classes=10)
         else:
-            self.res = models.resnet18(num_classes=100)
+            self.res = models.resnet18(num_classes=2)
 
 
     def forward(self, x):
