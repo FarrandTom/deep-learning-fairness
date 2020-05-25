@@ -124,80 +124,85 @@ def train_dp(trainloader, model, optimizer, epoch):
     running_loss = 0.0
     label_norms = defaultdict(list)
     ssum = 0
-    for i, data in tqdm(enumerate(trainloader, 0), leave=True):
-        if helper.params['dataset'] == 'dif':
-            inputs, idxs, labels = data
-        else:
-            inputs, labels = data
-        
-        inputs = inputs.to(device)
-        labels = labels.to(device)
-        optimizer.zero_grad()
-
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        running_loss += torch.mean(loss).item()
-
-        losses = torch.mean(loss.reshape(num_microbatches, -1), dim=1)
-        
-        saved_var = dict()
-        for tensor_name, tensor in model.named_parameters():
-            saved_var[tensor_name] = torch.zeros_like(tensor)
-        grad_vecs = dict()
-        count_vecs = defaultdict(int)
-        for pos, j in enumerate(losses):
-            j.backward(retain_graph=True)
-
-            if helper.params.get('count_norm_cosine_per_batch', False):
-
-                grad_vec = helper.get_grad_vec(model, device)
-                label = labels[pos].item()
-                count_vecs[label] += 1
-                if grad_vecs.get(label, False) is not False:
-                    grad_vecs[label].add_(grad_vec)
-                else:
-                    grad_vecs[label] = grad_vec
-
-            total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), S)
+    
+    with tqdm(total=len(trainloader), leave=True) as pbar:
+        for i, data in enumerate(trainloader, 0):
             if helper.params['dataset'] == 'dif':
-                label_norms[f'{labels[pos]}_{helper.label_skin_list[idxs[pos]]}'].append(total_norm)
+                inputs, idxs, labels = data
             else:
-                label_norms[int(labels[pos])].append(total_norm)
+                inputs, labels = data
+
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            optimizer.zero_grad()
+
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            running_loss += torch.mean(loss).item()
+
+            losses = torch.mean(loss.reshape(num_microbatches, -1), dim=1)
+
+            saved_var = dict()
+            for tensor_name, tensor in model.named_parameters():
+                saved_var[tensor_name] = torch.zeros_like(tensor)
+            grad_vecs = dict()
+            count_vecs = defaultdict(int)
+
+            for pos, j in enumerate(losses):
+                j.backward(retain_graph=True)
+
+                if helper.params.get('count_norm_cosine_per_batch', False):
+
+                    grad_vec = helper.get_grad_vec(model, device)
+                    label = labels[pos].item()
+                    count_vecs[label] += 1
+                    if grad_vecs.get(label, False) is not False:
+                        grad_vecs[label].add_(grad_vec)
+                    else:
+                        grad_vecs[label] = grad_vec
+
+                total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), S)
+                if helper.params['dataset'] == 'dif':
+                    label_norms[f'{labels[pos]}_{helper.label_skin_list[idxs[pos]]}'].append(total_norm)
+                else:
+                    label_norms[int(labels[pos])].append(total_norm)
+
+                for tensor_name, tensor in model.named_parameters():
+                      if tensor.grad is not None:
+                        new_grad = tensor.grad
+                    #logger.info('new grad: ', new_grad)
+                        saved_var[tensor_name].add_(new_grad)
+                model.zero_grad()
 
             for tensor_name, tensor in model.named_parameters():
-                  if tensor.grad is not None:
-                     new_grad = tensor.grad
-                #logger.info('new grad: ', new_grad)
-                     saved_var[tensor_name].add_(new_grad)
-            model.zero_grad()
+                if tensor.grad is not None:
+                    if device.type == 'cuda':
+                        saved_var[tensor_name].add_(torch.cuda.FloatTensor(tensor.grad.shape).normal_(0, sigma))
+                    else:
+                        saved_var[tensor_name].add_(torch.FloatTensor(tensor.grad.shape).normal_(0, sigma))
+                    tensor.grad = saved_var[tensor_name] / num_microbatches
 
-        for tensor_name, tensor in model.named_parameters():
-            if tensor.grad is not None:
-                if device.type == 'cuda':
-                    saved_var[tensor_name].add_(torch.cuda.FloatTensor(tensor.grad.shape).normal_(0, sigma))
-                else:
-                    saved_var[tensor_name].add_(torch.FloatTensor(tensor.grad.shape).normal_(0, sigma))
-                tensor.grad = saved_var[tensor_name] / num_microbatches
+            if helper.params.get('count_norm_cosine_per_batch', False):
+                total_grad_vec = helper.get_grad_vec(model, device)
+                # logger.info(f'Total grad_vec: {torch.norm(total_grad_vec)}')
+                for k, vec in sorted(grad_vecs.items(), key=lambda t: t[0]):
+                    vec = vec/count_vecs[k]
+                    cosine = torch.cosine_similarity(total_grad_vec, vec, dim=-1)
+                    distance = torch.norm(total_grad_vec-vec)
+                    # logger.info(f'for key {k}, len: {count_vecs[k]}: {cosine}, norm: {distance}')
 
-        if helper.params.get('count_norm_cosine_per_batch', False):
-            total_grad_vec = helper.get_grad_vec(model, device)
-            # logger.info(f'Total grad_vec: {torch.norm(total_grad_vec)}')
-            for k, vec in sorted(grad_vecs.items(), key=lambda t: t[0]):
-                vec = vec/count_vecs[k]
-                cosine = torch.cosine_similarity(total_grad_vec, vec, dim=-1)
-                distance = torch.norm(total_grad_vec-vec)
-                # logger.info(f'for key {k}, len: {count_vecs[k]}: {cosine}, norm: {distance}')
+                    plot(i + epoch*len(trainloader), cosine, name=f'cosine/{k}')
+                    plot(i + epoch*len(trainloader), distance, name=f'distance/{k}')
 
-                plot(i + epoch*len(trainloader), cosine, name=f'cosine/{k}')
-                plot(i + epoch*len(trainloader), distance, name=f'distance/{k}')
+            optimizer.step()
 
-        optimizer.step()
-
-        if i > 0 and i % 20 == 0:
-            #             logger.info('[%d, %5d] loss: %.3f' %
-            #                   (epoch + 1, i + 1, running_loss / 2000))
-            plot(epoch * len(trainloader) + i, running_loss, 'Train Loss')
-            running_loss = 0.0
+            if i > 0 and i % 20 == 0:
+                #             logger.info('[%d, %5d] loss: %.3f' %
+                #                   (epoch + 1, i + 1, running_loss / 2000))
+                plot(epoch * len(trainloader) + i, running_loss, 'Train Loss')
+                running_loss = 0.0
+            pbar.update(1)
+            
     print(ssum)
     for pos, norms in sorted(label_norms.items(), key=lambda x: x[0]):
         logger.info(f"{pos}: {np.mean(norms)}")
@@ -210,36 +215,38 @@ def train_dp(trainloader, model, optimizer, epoch):
 def train(trainloader, model, optimizer, epoch):
     model.train()
     running_loss = 0.0
-    for i, data in tqdm(enumerate(trainloader, 0), leave=True):
-        # get the inputs
-        if helper.params['dataset'] == 'dif':
-            inputs, idxs, labels = data
-        else:
-            inputs, labels = data
+    with tqdm(total=len(trainloader), leave=True) as pbar:
+        for i, data in enumerate(trainloader, 0):
+            # get the inputs
+            if helper.params['dataset'] == 'dif':
+                inputs, idxs, labels = data
+            else:
+                inputs, labels = data
 
-        keys_input = labels == helper.params['key_to_drop']
-        inputs_keys = inputs[keys_input]
+            keys_input = labels == helper.params['key_to_drop']
+            inputs_keys = inputs[keys_input]
 
-        # inputs[keys_input] = torch.tensor(ndimage.filters.gaussian_filter(inputs[keys_input].numpy(),
-        #                                                                   sigma=helper.params['csigma']))
-        inputs = inputs.to(device)
-        labels = labels.to(device)
-        # zero the parameter gradients
-        optimizer.zero_grad()
+            # inputs[keys_input] = torch.tensor(ndimage.filters.gaussian_filter(inputs[keys_input].numpy(),
+            #                                                                   sigma=helper.params['csigma']))
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            # zero the parameter gradients
+            optimizer.zero_grad()
 
-        # forward + backward + optimize
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
+            # forward + backward + optimize
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
 
-        loss.backward()
-        optimizer.step()
-        # logger.info statistics
-        running_loss += loss.item()
-        if i > 0 and i % 20 == 0:
-            #             logger.info('[%d, %5d] loss: %.3f' %
-            #                   (epoch + 1, i + 1, running_loss / 2000))
-            plot(epoch * len(trainloader) + i, running_loss, 'Train Loss')
-            running_loss = 0.0
+            loss.backward()
+            optimizer.step()
+            # logger.info statistics
+            running_loss += loss.item()
+            if i > 0 and i % 20 == 0:
+                #             logger.info('[%d, %5d] loss: %.3f' %
+                #                   (epoch + 1, i + 1, running_loss / 2000))
+                plot(epoch * len(trainloader) + i, running_loss, 'Train Loss')
+                running_loss = 0.0
+            pbar.update(1)
 
 
 if __name__ == '__main__':
@@ -273,6 +280,7 @@ if __name__ == '__main__':
     epochs = int(helper.params['epochs'])
     S = float(helper.params['S'])
     z = float(helper.params['z'])
+    sigma = z * S
     dp = helper.params['dp']
     mu = helper.params['mu']
     logger.info(f'DP: {dp}')
