@@ -67,19 +67,26 @@ def compute_norm(model, norm_type=2):
 
 
 
-def test(net, epoch, name, testloader, vis=True):
+def test(net, epoch, testloader, vis=True):
     net.eval()
     correct = 0
     total = 0
-    i=0
+    i = 0
     correct_labels = []
     predict_labels = []
+    
+    female_total = 0
+    female_correct = 0
+    female_correct_labels = []
+    female_predict_labels = []
+    
+    male_total = 0
+    male_correct = 0
+    male_correct_labels = []
+    male_predict_labels = []
     with torch.no_grad():
         for data in tqdm(testloader):
-            if helper.params['dataset'] == 'dif':
-                inputs, idxs, labels = data
-            else:
-                inputs, labels = data
+            inputs, protected_labels, labels = data
             inputs = inputs.to(device)
             labels = labels.to(device)
             outputs = net(inputs)
@@ -88,33 +95,86 @@ def test(net, epoch, name, testloader, vis=True):
             correct_labels.extend([x.item() for x in labels])
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-    logger.info(f'Name: {name}. Epoch {epoch}. acc: {100 * correct / total}')
+            
+            for count, i in enumerate(protected_labels):
+                if i == 0:
+                    female_predict_labels.append(predicted[count].item())
+                    female_correct_labels.append(labels[count].item())
+                else:
+                    male_predict_labels.append(predicted[count].item())
+                    male_correct_labels.append(labels[count].item())
+            
+        for predicted_label, correct_label in zip(female_predict_labels, female_correct_labels):
+            female_total += 1
+            if predicted_label == correct_label:
+                female_correct += 1
+
+        for predicted_label, correct_label in zip(male_predict_labels, male_correct_labels):
+            male_total += 1
+            if predicted_label == correct_label:
+                male_correct += 1
+             
+    logger.info(f'Epoch {epoch}. acc: {100 * correct / total}. total values: {total}')
+    logger.info(f'Epoch {epoch}. female acc: {100 * female_correct / female_total} total values: {female_total}')
+    if male_total > 0:
+        logger.info(f'Epoch {epoch}. male acc: {100 * male_correct / male_total} total values: {male_total}')
     main_acc = 100 * correct / total
+    
+    i = 0
     if vis:
-        plot(epoch, 100 * correct / total, name)
-        fig, cm = plot_confusion_matrix(correct_labels, predict_labels, labels=helper.labels, normalize=True)
-        writer.add_figure(figure=fig, global_step=epoch, tag='tag/normalized_cm')
-        acc_list = list()
-        acc_dict = dict()
-        for i, name in enumerate(helper.labels):
-            class_acc = cm[i][i]/cm[i].sum() * 100
-            acc_dict[i] = class_acc
-            logger.info(f'Class: {i}, accuracy: {class_acc}')
-            plot(epoch, class_acc, name=f'accuracy_per_class/class_{name}')
-            acc_list.append(class_acc)
+        main_fig, main_cm = plot_confusion_matrix(correct_labels,
+                                                  predict_labels,
+                                                  labels=helper.labels,
+                                                  normalize=False)
+        writer.add_figure(figure=main_fig, global_step=epoch, tag='tag/unnormalized_cm')
+        # Accuracy
+        plot(epoch, 100 * correct / total, "Main Accuracy")
+        # Precision
+        precision = (main_cm[1][1]/(main_cm[1][1] + main_cm[0][1]))
+        plot(epoch, precision, "Main Precision")
+        # Recall 
+        recall = (main_cm[1][1]/(main_cm[1][1] + main_cm[1][0]))
+        plot(epoch, recall, "Main Recall")
+        # F1-Score
+        f1_score = ((2 * precision * recall) / (precision + recall))
+        plot(epoch, f1_score, "Main F1")
+        
+        plot(epoch, 100 * female_correct / female_total, "Female Accuracy")
+        female_fig, female_cm = plot_confusion_matrix(female_correct_labels,
+                                                      female_predict_labels,
+                                                      labels=helper.labels,
+                                                      normalize=False)
+        writer.add_figure(figure=female_fig, global_step=epoch, tag='tag/female_unnormalized_cm')
+        # Accuracy
+        plot(epoch, 100 * female_correct / female_total, "Female Accuracy")
+        # Precision
+        female_precision = (female_cm[1][1]/(female_cm[1][1] + female_cm[0][1]))
+        plot(epoch, female_precision, "Female Precision")
+        # Recall 
+        female_recall = (female_cm[1][1]/(female_cm[1][1] + female_cm[1][0]))
+        plot(epoch, female_recall, "Female Recall")
+        # F1-Score
+        female_f1_score = ((2 * female_precision * female_recall) / (female_precision + female_recall))
+        plot(epoch, female_f1_score, "Female F1")
 
-        fig2 = helper.plot_acc_list(acc_dict, epoch, name='per_class', accuracy=main_acc)
-        writer.add_figure(figure=fig2, global_step=epoch, tag='tag/per_class')
-        torch.save(acc_dict, f"{helper.folder_path}/test_acc_class_{epoch}.pt")
-
-
-        plot(epoch, np.var(acc_list), name='accuracy_per_class/accuracy_var')
-        plot(epoch, np.max(acc_list), name='accuracy_per_class/accuracy_max')
-        plot(epoch, np.min(acc_list), name='accuracy_per_class/accuracy_min')
-        cm_name = f'{helper.params["folder_path"]}/cm_{epoch}.pt'
-        fig, cm = plot_confusion_matrix(correct_labels, predict_labels, labels=helper.labels, normalize=False)
-        torch.save(cm, cm_name)
-        writer.add_figure(figure=fig, global_step=epoch, tag='tag/unnormalized_cm')
+        if male_total > 0:
+            male_fig, male_cm = plot_confusion_matrix(male_correct_labels,
+                                                      male_predict_labels,
+                                                      labels=helper.labels,
+                                                      normalize=False)
+            writer.add_figure(figure=male_fig, global_step=epoch, tag='tag/male_unnormalized_cm')
+            # Accuracy
+            plot(epoch, 100 * male_correct / male_total, "Male Accuracy")
+            # Precision
+            male_precision = (male_cm[1][1]/(male_cm[1][1] + male_cm[0][1]))
+            plot(epoch, male_precision, "Male Precision")
+            # Recall 
+            male_recall = (male_cm[1][1]/(male_cm[1][1] + male_cm[1][0]))
+            plot(epoch, male_recall, "Male Recall")
+            # F1-Score
+            male_f1_score = ((2 * male_precision * male_recall) / (male_precision + male_recall))
+            plot(epoch, male_f1_score, "Male F1")
+        
     return 100 * correct / total
 
 
@@ -127,10 +187,7 @@ def train_dp(trainloader, model, optimizer, epoch):
     
     with tqdm(total=len(trainloader), leave=True) as pbar:
         for i, data in enumerate(trainloader, 0):
-            if helper.params['dataset'] == 'dif':
-                inputs, idxs, labels = data
-            else:
-                inputs, labels = data
+            inputs, protected_labels, labels = data
 
             inputs = inputs.to(device)
             labels = labels.to(device)
@@ -217,17 +274,8 @@ def train(trainloader, model, optimizer, epoch):
     running_loss = 0.0
     with tqdm(total=len(trainloader), leave=True) as pbar:
         for i, data in enumerate(trainloader, 0):
-            # get the inputs
-            if helper.params['dataset'] == 'dif':
-                inputs, idxs, labels = data
-            else:
-                inputs, labels = data
+            inputs, protected_labels, labels = data
 
-            keys_input = labels == helper.params['key_to_drop']
-            inputs_keys = inputs[keys_input]
-
-            # inputs[keys_input] = torch.tensor(ndimage.filters.gaussian_filter(inputs[keys_input].numpy(),
-            #                                                                   sigma=helper.params['csigma']))
             inputs = inputs.to(device)
             labels = labels.to(device)
             # zero the parameter gradients
@@ -267,7 +315,7 @@ if __name__ == '__main__':
         helper.corpus = torch.load(helper.params['corpus'])
         logger.info(helper.corpus.train.shape)
     else:
-        helper = ImageHelper(current_time=d, params=params, name='utk')
+        helper = ImageHelper(current_time=d, params=params, name=args.name)
     logger.addHandler(logging.FileHandler(filename=f'{helper.folder_path}/log.txt'))
     logger.addHandler(logging.StreamHandler())
     logger.setLevel(logging.DEBUG)
@@ -324,7 +372,7 @@ if __name__ == '__main__':
     elif helper.params['dataset'] == 'dif':
         num_classes = len(helper.labels)
     elif helper.params['dataset'] == 'celeba':
-        num_classes = 2
+        num_classes = len(helper.labels)
     else:
         num_classes = 10
 
@@ -409,27 +457,7 @@ if __name__ == '__main__':
             train(helper.train_loader, net, optimizer, epoch)
         if helper.params['scheduler']:
             scheduler.step()
-        main_acc = test(net, epoch, "accuracy", helper.test_loader, vis=True)
-        unb_acc_dict = dict()
-        if helper.params['dataset'] == 'dif':
-            for name, value in sorted(helper.unbalanced_loaders.items(), key=lambda x: x[0]):
-                unb_acc = test(net, epoch, name, value, vis=False)
-                plot(epoch, unb_acc, name=f'dif_unbalanced/{name}')
-                unb_acc_dict[name] = unb_acc
-                
-            unb_acc_list = list(unb_acc_dict.values())
-            logger.info(f'Accuracy on unbalanced set: {sorted(unb_acc_list)}')
-
-            plot(epoch, np.mean(unb_acc_list), f'accuracy_detailed/mean')
-            plot(epoch, np.min(unb_acc_list), f'accuracy_detailed/min')
-            plot(epoch, np.max(unb_acc_list), f'accuracy_detailed/max')
-            plot(epoch, np.var(unb_acc_list), f'accuracy_detailed/var')
-
-            fig = helper.plot_acc_list(unb_acc_dict, epoch, name='per_subgroup', accuracy=main_acc)
-
-            torch.save(unb_acc_dict, f"{helper.folder_path}/acc_subgroup_{epoch}.pt")
-            writer.add_figure(figure=fig, global_step=epoch, tag='tag/subgroup')
-
-
+        main_acc = test(net, epoch, helper.test_loader, vis=True)
+        
         helper.save_model(net, epoch, main_acc)
     logger.info(f"Finished training for model: {helper.current_time}. Folder: {helper.folder_path}")

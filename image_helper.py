@@ -357,6 +357,8 @@ class ImageHelper(Helper):
     
     def load_celeba_data(self):
         """Build and return a data loader."""
+        self.name = self.params['name']
+        
         image_dir = ''
         attr_path = ''
         selected_attrs = ''
@@ -375,15 +377,18 @@ class ImageHelper(Helper):
         self.train_dataset = CelebADataset(image_dir=self.params['image_dir'],
                                            attr_path=self.params['attr_path'],
                                            selected_attr=self.params['selected_attr'],
+                                           protected_attr=self.params['protected_attr'],
                                            mode='train',
                                            transform=transform_train)
 
         self.test_dataset = CelebADataset(image_dir=self.params['image_dir'],
                                           attr_path=self.params['attr_path'],
                                           selected_attr=self.params['selected_attr'],
+                                          protected_attr=self.params['protected_attr'],
                                           mode='test',
                                           transform=transform_test)
-        self.dataset_size = len(self.train_dataset) + len(self.test_dataset)
+        
+        self.dataset_size = len(self.train_dataset)
         logger.info(f"Length of CelebA dataset: {self.dataset_size}")
         
         self.train_loader = torch.utils.data.DataLoader(self.train_dataset,
@@ -396,8 +401,8 @@ class ImageHelper(Helper):
                                                        batch_size=self.params['test_batch_size'],
                                                        shuffle=False,
                                                        num_workers=2)
-        
-        self.labels = [0, 1]
+                
+        self.labels = self.params['labels']
         return True
     
     

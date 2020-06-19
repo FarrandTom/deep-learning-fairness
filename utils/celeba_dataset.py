@@ -9,11 +9,12 @@ import random
 class CelebADataset(Dataset):
     """Dataset class for the CelebA dataset."""
 
-    def __init__(self, image_dir, attr_path, selected_attr, transform, mode):
+    def __init__(self, image_dir, attr_path, selected_attr, protected_attr, transform, mode):
         """Initialize and preprocess the CelebA dataset."""
         self.image_dir = image_dir
         self.attr_path = attr_path
         self.selected_attr = selected_attr
+        self.protected_attr = protected_attr
         self.transform = transform
         self.mode = mode
         self.train_dataset = []
@@ -41,18 +42,25 @@ class CelebADataset(Dataset):
         for i, line in enumerate(lines):
             split = line.split(',')
             filename = split[0]
-            values = split[1:]
+            values = split[0:]
+            idx = self.attr2idx[self.selected_attr]
+            protected_idx = self.attr2idx[self.protected_attr]
             
-            idx = self.attr2idx[self.selected_attr[0]]
             if values[idx] == '1':
                 label = int(1)
             else:
                 label = int(0)
-
-            if (i+1) < 2000:
-                self.test_dataset.append([filename, label])
+               
+            if values[protected_idx] == '1':
+                protected_label = int(1)
             else:
-                self.train_dataset.append([filename, label])
+                protected_label = int(0)
+
+            # Use an 80/20 train/test split. With 30,000 in the dataset this is 6,000 in test. 
+            if (i+1) < 6000:
+                self.test_dataset.append([filename, protected_label, label])
+            else:
+                self.train_dataset.append([filename, protected_label, label])
             
 
         print('Finished preprocessing the CelebA dataset...')
@@ -60,9 +68,9 @@ class CelebADataset(Dataset):
     def __getitem__(self, index):
         """Return one image and its corresponding attribute label."""
         dataset = self.train_dataset if self.mode == 'train' else self.test_dataset
-        filename, label = dataset[index]
+        filename, protected_label, label = dataset[index]
         image = Image.open(os.path.join(self.image_dir, filename))
-        return self.transform(image), label
+        return self.transform(image), protected_label, label
 
     def __len__(self):
         """Return the number of images."""
