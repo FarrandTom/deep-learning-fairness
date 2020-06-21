@@ -1,0 +1,178 @@
+﻿Step,Accuracy type,Differential Privacy,Accuracy
+37,Overall,High DP (ε=1.15),0.494582443
+74,Overall,High DP (ε=1.15),0.494082336
+111,Overall,High DP (ε=1.15),0.494249039
+148,Overall,High DP (ε=1.15),0.494415741
+185,Overall,High DP (ε=1.15),0.494749107
+222,Overall,High DP (ε=1.15),0.495415916
+259,Overall,High DP (ε=1.15),0.495249214
+296,Overall,High DP (ε=1.15),0.495415916
+333,Overall,High DP (ε=1.15),0.496749458
+370,Overall,High DP (ε=1.15),0.497249527
+407,Overall,High DP (ε=1.15),0.503583946
+444,Overall,High DP (ε=1.15),0.513418884
+481,Overall,High DP (ε=1.15),0.519253197
+518,Overall,High DP (ε=1.15),0.530421753
+555,Overall,High DP (ε=1.15),0.529254875
+592,Overall,High DP (ε=1.15),0.545090866
+629,Overall,High DP (ε=1.15),0.54525753
+666,Overall,High DP (ε=1.15),0.544924164
+703,Overall,High DP (ε=1.15),0.551758614
+740,Overall,High DP (ε=1.15),0.552425423
+777,Overall,High DP (ε=1.15),0.5672612
+814,Overall,High DP (ε=1.15),0.560093346
+851,Overall,High DP (ε=1.15),0.564260712
+888,Overall,High DP (ε=1.15),0.572095337
+925,Overall,High DP (ε=1.15),0.573428917
+962,Overall,High DP (ε=1.15),0.578929825
+999,Overall,High DP (ε=1.15),0.577596283
+1036,Overall,High DP (ε=1.15),0.579429893
+1073,Overall,High DP (ε=1.15),0.577096176
+1110,Overall,High DP (ε=1.15),0.579596596
+1147,Overall,High DP (ε=1.15),0.578263054
+1184,Overall,High DP (ε=1.15),0.589431572
+1221,Overall,High DP (ε=1.15),0.576596107
+1258,Overall,High DP (ε=1.15),0.583263893
+1295,Overall,High DP (ε=1.15),0.583930664
+1332,Overall,High DP (ε=1.15),0.575095863
+1369,Overall,High DP (ε=1.15),0.587264557
+1406,Overall,High DP (ε=1.15),0.598599777
+1443,Overall,High DP (ε=1.15),0.598766479
+1480,Overall,High DP (ε=1.15),0.603767281
+1517,Overall,High DP (ε=1.15),0.605267563
+1554,Overall,High DP (ε=1.15),0.609268227
+1591,Overall,High DP (ε=1.15),0.61326889
+1628,Overall,High DP (ε=1.15),0.612602081
+1665,Overall,High DP (ε=1.15),0.61576931
+1702,Overall,High DP (ε=1.15),0.622103691
+1739,Overall,High DP (ε=1.15),0.625270882
+1776,Overall,High DP (ε=1.15),0.623770638
+1813,Overall,High DP (ε=1.15),0.63527256
+1850,Overall,High DP (ε=1.15),0.63077179
+1887,Overall,High DP (ε=1.15),0.636772804
+1924,Overall,High DP (ε=1.15),0.642440414
+1961,Overall,High DP (ε=1.15),0.651608582
+1998,Overall,High DP (ε=1.15),0.651108551
+2035,Overall,High DP (ε=1.15),0.65344223
+2072,Overall,High DP (ε=1.15),0.65727623
+2109,Overall,High DP (ε=1.15),0.665610962
+2146,Overall,High DP (ε=1.15),0.66544426
+2183,Overall,High DP (ε=1.15),0.667611237
+37,Overall,Low DP (ε=16.2),0.494582443
+74,Overall,Low DP (ε=16.2),0.494749107
+111,Overall,Low DP (ε=16.2),0.499749947
+148,Overall,Low DP (ε=16.2),0.516919479
+185,Overall,Low DP (ε=16.2),0.53275547
+222,Overall,Low DP (ε=16.2),0.545090866
+259,Overall,Low DP (ε=16.2),0.552925491
+296,Overall,Low DP (ε=16.2),0.560593414
+333,Overall,Low DP (ε=16.2),0.573595581
+370,Overall,Low DP (ε=16.2),0.577262878
+407,Overall,Low DP (ε=16.2),0.584597435
+444,Overall,Low DP (ε=16.2),0.595932655
+481,Overall,Low DP (ε=16.2),0.613102188
+518,Overall,Low DP (ε=16.2),0.629104843
+555,Overall,Low DP (ε=16.2),0.63077179
+592,Overall,Low DP (ε=16.2),0.659609909
+629,Overall,Low DP (ε=16.2),0.667611237
+666,Overall,Low DP (ε=16.2),0.690948486
+703,Overall,Low DP (ε=16.2),0.715285873
+740,Overall,Low DP (ε=16.2),0.729788284
+777,Overall,Low DP (ε=16.2),0.747624588
+814,Overall,Low DP (ε=16.2),0.767794647
+851,Overall,Low DP (ε=16.2),0.779629974
+888,Overall,Low DP (ε=16.2),0.790298386
+925,Overall,Low DP (ε=16.2),0.80313385
+962,Overall,Low DP (ε=16.2),0.810801773
+999,Overall,Low DP (ε=16.2),0.813135529
+1036,Overall,Low DP (ε=16.2),0.819970016
+1073,Overall,Low DP (ε=16.2),0.819636612
+1110,Overall,Low DP (ε=16.2),0.826137695
+1147,Overall,Low DP (ε=16.2),0.828304749
+1184,Overall,Low DP (ε=16.2),0.832305374
+1221,Overall,Low DP (ε=16.2),0.832638779
+1258,Overall,Low DP (ε=16.2),0.83513916
+1295,Overall,Low DP (ε=16.2),0.837639618
+1332,Overall,Low DP (ε=16.2),0.835639267
+1369,Overall,Low DP (ε=16.2),0.842473755
+1406,Overall,Low DP (ε=16.2),0.844640808
+1443,Overall,Low DP (ε=16.2),0.846974487
+1480,Overall,Low DP (ε=16.2),0.847307892
+1517,Overall,Low DP (ε=16.2),0.846307755
+1554,Overall,Low DP (ε=16.2),0.848641434
+1591,Overall,Low DP (ε=16.2),0.846974487
+1628,Overall,Low DP (ε=16.2),0.848308029
+1665,Overall,Low DP (ε=16.2),0.850141678
+1702,Overall,Low DP (ε=16.2),0.852142029
+1739,Overall,Low DP (ε=16.2),0.852142029
+1776,Overall,Low DP (ε=16.2),0.853475571
+1813,Overall,Low DP (ε=16.2),0.854475708
+1850,Overall,Low DP (ε=16.2),0.852475433
+1887,Overall,Low DP (ε=16.2),0.855809326
+1924,Overall,Low DP (ε=16.2),0.855642624
+1961,Overall,Low DP (ε=16.2),0.856142654
+1998,Overall,Low DP (ε=16.2),0.85730957
+2035,Overall,Low DP (ε=16.2),0.858809814
+2072,Overall,Low DP (ε=16.2),0.857142868
+2109,Overall,Low DP (ε=16.2),0.860143356
+2146,Overall,Low DP (ε=16.2),0.859809952
+2183,Overall,Low DP (ε=16.2),0.85964325
+37,Overall,Non-DP,0.89864975
+74,Overall,Non-DP,0.90131691
+111,Overall,Non-DP,0.893315582
+148,Overall,Non-DP,0.90681778
+185,Overall,Non-DP,0.906151047
+222,Overall,Non-DP,0.907651291
+259,Overall,Non-DP,0.900983505
+296,Overall,Non-DP,0.904817505
+333,Overall,Non-DP,0.902650452
+370,Overall,Non-DP,0.902317047
+407,Overall,Non-DP,0.903817291
+444,Overall,Non-DP,0.903650589
+481,Overall,Non-DP,0.897983017
+518,Overall,Non-DP,0.899483261
+555,Overall,Non-DP,0.905150833
+592,Overall,Non-DP,0.906651077
+629,Overall,Non-DP,0.889981689
+666,Overall,Non-DP,0.905150833
+703,Overall,Non-DP,0.90131691
+740,Overall,Non-DP,0.90681778
+777,Overall,Non-DP,0.900149994
+814,Overall,Non-DP,0.902817154
+851,Overall,Non-DP,0.902483749
+888,Overall,Non-DP,0.903150558
+925,Overall,Non-DP,0.906151047
+962,Overall,Non-DP,0.9044841
+999,Overall,Non-DP,0.904317398
+1036,Overall,Non-DP,0.900483398
+1073,Overall,Non-DP,0.898149719
+1110,Overall,Non-DP,0.895482559
+1147,Overall,Non-DP,0.905484238
+1184,Overall,Non-DP,0.909151535
+1221,Overall,Non-DP,0.905817642
+1258,Overall,Non-DP,0.905150833
+1295,Overall,Non-DP,0.904317398
+1332,Overall,Non-DP,0.9044841
+1369,Overall,Non-DP,0.904317398
+1406,Overall,Non-DP,0.9044841
+1443,Overall,Non-DP,0.893648911
+1480,Overall,Non-DP,0.9044841
+1517,Overall,Non-DP,0.898483047
+1554,Overall,Non-DP,0.903317184
+1591,Overall,Non-DP,0.900816803
+1628,Overall,Non-DP,0.902817154
+1665,Overall,Non-DP,0.900149994
+1702,Overall,Non-DP,0.904150696
+1739,Overall,Non-DP,0.904317398
+1776,Overall,Non-DP,0.907151184
+1813,Overall,Non-DP,0.910318375
+1850,Overall,Non-DP,0.903317184
+1887,Overall,Non-DP,0.903150558
+1924,Overall,Non-DP,0.905150833
+1961,Overall,Non-DP,0.899649963
+1998,Overall,Non-DP,0.891815338
+2035,Overall,Non-DP,0.897816315
+2072,Overall,Non-DP,0.906151047
+2109,Overall,Non-DP,0.907651291
+2146,Overall,Non-DP,0.903150558
+2183,Overall,Non-DP,0.902650452
