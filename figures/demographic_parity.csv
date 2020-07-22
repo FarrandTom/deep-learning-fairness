@@ -1,0 +1,61 @@
+Imbalance,Privacy Level,Demographic Parity,Category
+0.999,"High Privacy (_=1.15, z=1.5)",0.604600767,Overall
+0.999,"Med Privacy (_=4.98, z=0.7)",0.465244207,Overall
+0.999,"Low Privacy (_=16.2, z=0.5)",0.462910485,Overall
+0.999,Non-DP,0.48408068,Overall
+0.99,"High Privacy (_=1.15, z=1.5)",0.628938156,Overall
+0.99,"Med Privacy (_=4.98, z=0.7)",0.492582097,Overall
+0.99,"Low Privacy (_=16.2, z=0.5)",0.484914152,Overall
+0.99,Non-DP,0.489248208,Overall
+0.9,"High Privacy (_=1.15, z=1.5)",0.640273379,Overall
+0.9,"Med Privacy (_=4.98, z=0.7)",0.495582597,Overall
+0.9,"Low Privacy (_=16.2, z=0.5)",0.498249708,Overall
+0.9,Non-DP,0.496249375,Overall
+0.8,"High Privacy (_=1.15, z=1.5)",0.624604101,Overall
+0.8,"Med Privacy (_=4.98, z=0.7)",0.503250542,Overall
+0.8,"Low Privacy (_=16.2, z=0.5)",0.497416236,Overall
+0.8,Non-DP,0.493415569,Overall
+0.7,"High Privacy (_=1.15, z=1.5)",0.646774462,Overall
+0.7,"Med Privacy (_=4.98, z=0.7)",0.498749792,Overall
+0.7,"Low Privacy (_=16.2, z=0.5)",0.489081514,Overall
+0.7,Non-DP,0.491415236,Overall
+0.999,"High Privacy (_=1.15, z=1.5)",0.604569713,Female
+0.999,"Med Privacy (_=4.98, z=0.7)",0.465143429,Female
+0.999,"Low Privacy (_=16.2, z=0.5)",0.462975317,Female
+0.999,Non-DP,0.483989326,Female
+0.99,"High Privacy (_=1.15, z=1.5)",0.629542396,Female
+0.99,"Med Privacy (_=4.98, z=0.7)",0.492597577,Female
+0.99,"Low Privacy (_=16.2, z=0.5)",0.485026918,Female
+0.99,Non-DP,0.489064603,Female
+0.9,"High Privacy (_=1.15, z=1.5)",0.637222222,Female
+0.9,"Med Privacy (_=4.98, z=0.7)",0.491296296,Female
+0.9,"Low Privacy (_=16.2, z=0.5)",0.492962963,Female
+0.9,Non-DP,0.493518519,Female
+0.8,"High Privacy (_=1.15, z=1.5)",0.633465305,Female
+0.8,"Med Privacy (_=4.98, z=0.7)",0.493019379,Female
+0.8,"Low Privacy (_=16.2, z=0.5)",0.490310481,Female
+0.8,Non-DP,0.491769119,Female
+0.7,"High Privacy (_=1.15, z=1.5)",0.660526316,Female
+0.7,"Med Privacy (_=4.98, z=0.7)",0.48492823,Female
+0.7,"Low Privacy (_=16.2, z=0.5)",0.480861244,Female
+0.7,Non-DP,0.484449761,Female
+0.999,"High Privacy (_=1.15, z=1.5)",0.666666667,Male
+0.999,"Med Privacy (_=4.98, z=0.7)",0.666666667,Male
+0.999,"Low Privacy (_=16.2, z=0.5)",0.333333333,Male
+0.999,Non-DP,0.666666667,Male
+0.99,"High Privacy (_=1.15, z=1.5)",0.563636364,Male
+0.99,"Med Privacy (_=4.98, z=0.7)",0.490909091,Male
+0.99,"Low Privacy (_=16.2, z=0.5)",0.472727273,Male
+0.99,Non-DP,0.509090909,Male
+0.9,"High Privacy (_=1.15, z=1.5)",0.667779633,Male
+0.9,"Med Privacy (_=4.98, z=0.7)",0.534223706,Male
+0.9,"Low Privacy (_=16.2, z=0.5)",0.54590985,Male
+0.9,Non-DP,0.520868114,Male
+0.8,"High Privacy (_=1.15, z=1.5)",0.589166667,Male
+0.8,"Med Privacy (_=4.98, z=0.7)",0.544166667,Male
+0.8,"Low Privacy (_=16.2, z=0.5)",0.525833333,Male
+0.8,Non-DP,0.5,Male
+0.7,"High Privacy (_=1.15, z=1.5)",0.615173172,Male
+0.7,"Med Privacy (_=4.98, z=0.7)",0.53051127,Male
+0.7,"Low Privacy (_=16.2, z=0.5)",0.507971413,Male
+0.7,Non-DP,0.50742166,Male
