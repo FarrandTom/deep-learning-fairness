@@ -32,4 +32,5 @@ Implementation of DPSGD is based on TF Privacy [repo](https://github.com/tensorf
 [2] H. B. McMahan and G. Andrew. A general approach to adding differential privacy to iterative training procedures. arXiv:1812.06210, 2018
 
 [3] H. B. McMahan, D. Ramage, K. Talwar, and L. Zhang. Learning differentially private recurrent language models. In ICLR, 2018
+
 =======
