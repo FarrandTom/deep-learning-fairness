@@ -1,7 +1,7 @@
 ## Readme
 
-The paper discusses how Differential Privacy (specifically DPSGD from [1]) 
-impacts model performance for underrepresented groups. 
+The paper discusses how Differential Privacy (specifically DPSGD from [1]) impacts model performance for underrepresented groups. 
+We aim to study how different levels of imbalance in the data affect the accuracy and the fairness of the decisions made by the model, given different levels of privacy. We demonstrate how even small imbalances and loose privacy guarantees can cause disparate impacts.
 
 ### Usage
 
