@@ -9,12 +9,11 @@ Configure environment by running: `pip install -r requirements.txt`
 
 We use Python3.7 and GPU Nvidia TitanX.
 
-File playing.py allows run the code. It uses `utils/params.yaml` 
-to set parameters from the paper and builds a graph on Tensorboard.
+File `playing.py` serves as the entry point for the code. It uses `utils/params.yaml` to set parameters from the paper and builds a graph on Tensorboard.
 For Sentiment prediction we use `playing_nlp.py`.
 
 
-Datasets:
+### Datasets:
 1. MNIST (part of PyTorch)
 2. Diversity in Faces (obtained from IBM [here](https://www.research.ibm.com/artificial-intelligence/trusted-ai/diversity-in-faces/#access))
 3. iNaturalist (download from [here](https://github.com/visipedia/inat_comp))
