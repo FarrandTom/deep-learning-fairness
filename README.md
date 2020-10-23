@@ -1,4 +1,4 @@
-## Neither Private Nor Fair: Impact of Data Imbalance on Utility and Fairness in Differential Privacy (Privacy-Preserving ML in Practice Workshop at CCS'20)
+## Neither Private Nor Fair: Impact of Data Imbalance on Utility and Fairness in Differential Privacy (CCS'20 Privacy-Preserving ML in Practice Workshop)
 The paper discusses how Differential Privacy (specifically DPSGD from [1]) impacts model performance for underrepresented groups. 
 We aim to study how different levels of imbalance in the data affect the accuracy and the fairness of the decisions made by the model, given different levels of privacy. We demonstrate how even small imbalances and loose privacy guarantees can cause disparate impacts.
 
