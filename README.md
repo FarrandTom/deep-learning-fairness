@@ -1,4 +1,4 @@
-## Readme
+## Neither Private Nor Fair: Impact of Data Imbalance on Utility and Fairness in Differential Privacy
 The paper discusses how Differential Privacy (specifically DPSGD from [1]) impacts model performance for underrepresented groups. 
 We aim to study how different levels of imbalance in the data affect the accuracy and the fairness of the decisions made by the model, given different levels of privacy. We demonstrate how even small imbalances and loose privacy guarantees can cause disparate impacts.
 
@@ -24,6 +24,17 @@ We use `compute_dp_sgd_privacy.py` copied from public [repo](https://github.com/
 DP-FedAvg implementation is taken from public [repo](https://github.com/ebagdasa/backdoor_federated_learning)  
 
 Implementation of DPSGD is based on TF Privacy [repo](https://github.com/tensorflow/privacy) and papers:
+
+### Paper
+https://arxiv.org/pdf/2005.13099.pdf
+
+### Citation
+`@article{farrand2020neither,
+  title={Neither Private Nor Fair: Impact of Data Imbalance on Utility and Fairness in Differential Privacy},
+  author={Farrand, Tom and Mireshghallah, Fatemehsadat and Singh, Sahib and Trask, Andrew},
+  journal={arXiv preprint arXiv:2009.06389},
+  year={2020}
+}`
 
 ### References
 [1] M. Abadi, A. Chu, I. Goodfellow, H. B. McMahan, I. Mironov, K. Talwar, and L. Zhang. Deep learning with differential privacy. In CCS, 2016.
