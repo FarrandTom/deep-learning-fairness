@@ -34,11 +34,4 @@ https://arxiv.org/pdf/2009.06389.pdf
   year={2020}
 }`
 
-### References
-[1] M. Abadi, A. Chu, I. Goodfellow, H. B. McMahan, I. Mironov, K. Talwar, and L. Zhang. Deep learning with differential privacy. In CCS, 2016.
-
-[2] H. B. McMahan and G. Andrew. A general approach to adding differential privacy to iterative training procedures. arXiv:1812.06210, 2018
-
-[3] H. B. McMahan, D. Ramage, K. Talwar, and L. Zhang. Learning differentially private recurrent language models. In ICLR, 2018
-
 =======
